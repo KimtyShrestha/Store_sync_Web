@@ -54,7 +54,7 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+import { loginApi } from "@/lib/api/auth.api";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -68,12 +68,10 @@ export default function LoginPage() {
     setIsLoading(true);
     setErrorMsg("");
     try {
-      await axios.post(
-        "http://localhost:5050/api/auth/login",
-        { email, password },
-        { withCredentials: true }
-      );
+      await loginApi({ email, password });
+      
       router.push("/owner/dashboard");
+      
     } catch (error: any) {
       if (error.response?.status === 403) {
         setErrorMsg("Your account is pending approval.");
