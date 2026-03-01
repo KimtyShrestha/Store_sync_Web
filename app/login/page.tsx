@@ -68,7 +68,9 @@ export default function LoginPage() {
     setIsLoading(true);
     setErrorMsg("");
     try {
-      await loginApi({ email, password });
+      // await loginApi({ email, password });
+      const res = await loginApi({ email, password });
+      console.log(res);
       
       router.push("/owner/dashboard");
       
