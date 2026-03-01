@@ -1,7 +1,7 @@
 import { loginApi, registerApi } from "@/lib/api/auth.api"
 
 export const loginAction = async (data: {
-  username: string
+  email: string
   password: string
 }) => {
   try {
