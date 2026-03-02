@@ -1,0 +1,220 @@
+/* ───────── Layout ───────── */
+.owner-layout {
+  display: flex;
+  min-height: 100vh; 
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #1f2a44;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  background: #f4f6f9;
+}
+
+/* ───────── Sidebar ───────── */
+.sidebar {
+  width: 240px;
+  background: #1e293b;
+  padding: 30px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* pushes logout to bottom */
+}
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.logo svg {
+  display: inline-block;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.sidebar a:hover {
+  color: #ef4444;
+}
+
+/* ───────── Main Content ───────── */
+.content {
+  flex: 1;
+  padding: 40px;
+  background: #f3f4f6; 
+  color: #0f172a;
+}
+
+/* Dashboard title */
+.dashboard-title {
+  font-size: 26px;
+  font-weight: 800;     /* bold */
+  margin-top: -8px;     
+  margin-bottom: 24px;
+  color: #0f172a;
+}
+
+
+.dashboard-title.logo {
+  font-size: 26px;  /* keeps Store Sync font style but bigger */
+  color: #0f172a;   /* dark text for right side background */
+  margin-top: -8px; /* slightly lifted */
+  margin-bottom: 24px;
+}
+
+
+
+/* ───────── Stats Grid ───────── */
+.db-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* ───────── Stat Cards ───────── */
+.db-stat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 18px;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.db-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+.db-stat-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.db-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+/* Currency badge */
+.currency {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-right: 6px;
+}
+
+/* Change indicators */
+.db-stat-change.up {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.db-stat-change.down {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* ───────── Charts Grid ───────── */
+.db-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ───────── Chart Cards ───────── */
+.db-chart-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  border: 1px solid #e5e7eb;
+  color: #0f172a;
+}
+
+.db-chart-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.db-chart-value {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.db-chart-sub {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.db-chart-sub span {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+/* Chart placeholder */
+.db-chart-placeholder {
+  height: 120px;
+  background: #f9fafb;
+  border: 1px dashed #e5e7eb;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #cc2f2f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #a52525;
+}
