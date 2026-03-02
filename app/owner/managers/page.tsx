@@ -3,7 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "@/lib/axios";
 
 export default function ManagersPage() {
   const [form, setForm] = useState({
@@ -14,43 +14,47 @@ export default function ManagersPage() {
   });
 
   const [managers, setManagers] = useState<any[]>([]);
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<{ [key: string]: string }>({});
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("token")
-      : null;
+  
 
   const fetchManagers = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5050/api/owner/managers",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.get("/owner/managers");
       setManagers(res.data.data);
     } catch (err) {
       console.log(err);
     }
   };
 
+   const fetchBranches = async () => {
+  try {
+    const res = await api.get("/branch/my-branches");
+    setBranches(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
   useEffect(() => {
-    fetchManagers();
-  }, []);
+  fetchManagers();
+  fetchBranches();
+}, []);
+
+ 
 
   const createManager = async () => {
     setLoading(true);
     setMessage("");
 
     try {
-      await axios.post(
-        "http://localhost:5050/api/owner/create-manager",
-        form,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post("/owner/create-manager", form);
 
       setIsSuccess(true);
       setMessage("Manager created successfully");
@@ -65,12 +69,38 @@ export default function ManagersPage() {
     }
   };
 
+
+ const assignManager = async (managerId: string) => {
+  const branchId = selectedBranch[managerId];
+
+  if (!branchId) {
+    alert("Please select a branch");
+    return;
+  }
+
+  try {
+    await api.patch(`/branch/assign-manager/${branchId}/${managerId}`);
+
+    await fetchBranches();
+
+    // Exit reassign mode
+    setSelectedBranch((prev) => {
+      const updated = { ...prev };
+      delete updated[managerId];
+      return updated;
+    });
+
+  } catch (error: any) {
+    alert(error.response?.data?.message || "Assignment failed");
+  }
+};
+
+
+
   const deleteManager = async (id: string) => {
     try {
-      await axios.delete(
-        `http://localhost:5050/api/owner/delete-manager/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.delete(`/owner/delete-manager/${id}`);
+
       setDeleteConfirm(null);
       fetchManagers();
     } catch (err) {
@@ -187,6 +217,7 @@ export default function ManagersPage() {
                 <th>Manager</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Branch</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -209,25 +240,189 @@ export default function ManagersPage() {
                   <td>
                     <span className="badge-manager">Manager</span>
                   </td>
+
+                  
+
                   <td>
-                    {deleteConfirm === manager._id ? (
-                      <div className="confirm-row">
-                        <span className="confirm-text">Sure?</span>
-                        <button className="btn-confirm-yes" onClick={() => deleteManager(manager._id)}>Yes</button>
-                        <button className="btn-confirm-no" onClick={() => setDeleteConfirm(null)}>No</button>
-                      </div>
-                    ) : (
-                      <button className="btn-delete" onClick={() => setDeleteConfirm(manager._id)}>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="3 6 5 6 21 6"/>
-                          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                          <path d="M10 11v6M14 11v6"/>
-                          <path d="M9 6V4h6v2"/>
-                        </svg>
-                        Delete
-                      </button>
-                    )}
-                  </td>
+  {(() => {
+    const assignedBranch = branches.find(
+      (branch) =>
+        branch.managerId &&
+        branch.managerId.toString() === manager._id.toString()
+    );
+
+    // 🔹 IF ASSIGNED
+    if (assignedBranch) {
+      const isReassigning =
+        selectedBranch[manager._id] !== undefined;
+
+      if (!isReassigning) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "#10b981",
+              }}
+            >
+              {assignedBranch.name}
+            </span>
+
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button
+                onClick={() =>
+                  setSelectedBranch({
+                    ...selectedBranch,
+                    [manager._id]: assignedBranch._id,
+                  })
+                }
+                style={{
+                  padding: "5px 10px",
+                  fontSize: "11px",
+                  borderRadius: "6px",
+                  border: "1px solid #e2e8f0",
+                  background: "#f8fafc",
+                  cursor: "pointer",
+                }}
+              >
+                Reassign
+              </button>
+
+              <button
+                onClick={async () => {
+                  try {
+                    await api.patch(
+                      `/branch/remove-manager/${assignedBranch._id}`
+                    );
+                    await fetchBranches();
+                  } catch {
+                    alert("Failed to remove manager");
+                  }
+                }}
+                style={{
+                  padding: "5px 10px",
+                  fontSize: "11px",
+                  borderRadius: "6px",
+                  border: "none",
+                  background: "#fff1f2",
+                  color: "#e63946",
+                  cursor: "pointer",
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      // 🔹 REASSIGN MODE
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <select
+            value={selectedBranch[manager._id]}
+            onChange={(e) =>
+              setSelectedBranch({
+                ...selectedBranch,
+                [manager._id]: e.target.value,
+              })
+            }
+            style={{
+              padding: "6px 8px",
+              borderRadius: "6px",
+              border: "1px solid #e2e8f0",
+              fontSize: "12px",
+            }}
+          >
+            {branches.map((branch) => (
+              <option key={branch._id} value={branch._id}>
+                {branch.name}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={() => assignManager(manager._id)}
+            style={{
+              padding: "6px 10px",
+              fontSize: "12px",
+              borderRadius: "6px",
+              border: "none",
+              background: "#e63946",
+              color: "#fff",
+              cursor: "pointer",
+            }}
+          >
+            Save
+          </button>
+        </div>
+      );
+    }
+
+    // 🔹 NOT ASSIGNED
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <select
+          value={selectedBranch[manager._id] || ""}
+          onChange={(e) =>
+            setSelectedBranch({
+              ...selectedBranch,
+              [manager._id]: e.target.value,
+            })
+          }
+          style={{
+            padding: "6px 8px",
+            borderRadius: "6px",
+            border: "1px solid #e2e8f0",
+            fontSize: "12px",
+          }}
+        >
+          <option value="">Select</option>
+          {branches.map((branch) => (
+            <option key={branch._id} value={branch._id}>
+              {branch.name}
+            </option>
+          ))}
+        </select>
+
+        <button
+          onClick={() => assignManager(manager._id)}
+          style={{
+            padding: "6px 10px",
+            fontSize: "12px",
+            borderRadius: "6px",
+            border: "none",
+            background: "#e63946",
+            color: "#fff",
+            cursor: "pointer",
+          }}
+        >
+          Assign
+        </button>
+      </div>
+    );
+  })()}
+</td>
+
+  
+                  
+  
+                  
                 </tr>
               ))}
             </tbody>
