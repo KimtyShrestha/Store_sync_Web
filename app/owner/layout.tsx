@@ -1,27 +1,3 @@
-// import "./owner.css";
-// import Link from "next/link";
-
-// export default function OwnerLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   return (
-//     <div className="owner-layout">
-//       <aside className="sidebar">
-//         <h2>STORE SYNC</h2>
-//         <nav>
-//           <Link href="/owner/dashboard">Dashboard</Link>
-//           <Link href="/owner/branches">Branches</Link>
-//           <Link href="/owner/managers">Managers</Link>
-//           <Link href="/owner/profile">Profile</Link>
-//         </nav>
-//       </aside>
-
-//       <main className="content">{children}</main>
-//     </div>
-//   );
-// }
 
 "use client";
 
@@ -69,6 +45,8 @@ export default function OwnerLayout({
             <Link href="/owner/dashboard">Dashboard</Link>
             <Link href="/owner/branches">Branches</Link>
             <Link href="/owner/managers">Managers</Link>
+            <Link href="/owner/daily-records">Daily Records</Link>
+            <Link href="/owner/message">Message</Link>
             <Link href="/owner/profile">Profile</Link>
           </nav>
         </div>

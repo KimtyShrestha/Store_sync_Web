@@ -24,6 +24,7 @@ export default function DashboardPage() {
   const [endDate, setEndDate] = useState("");
   const [unauthorized, setUnauthorized] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [ownerName, setOwnerName] = useState("");
 
   const fetchDashboard = async () => {
     try {
@@ -48,10 +49,20 @@ export default function DashboardPage() {
     setBranches(res.data.data);
   };
 
+  const fetchOwner = async () => {
+  try {
+    const res = await api.get("/owner/profile");
+    setOwnerName(res.data.data.firstName || "");
+  } catch (error) {
+    console.error("Failed to fetch owner");
+  }
+  };
+
   useEffect(() => {
-    fetchBranches();
-    fetchDashboard();
-  }, []);
+  fetchBranches();
+  fetchDashboard();
+  fetchOwner(); 
+}, []);
 
   useEffect(() => {
     fetchDashboard();
@@ -74,7 +85,25 @@ export default function DashboardPage() {
 
   return (
     <>
-      <h1 className="dashboard-title logo">Dashboard</h1>
+      <div style={{ marginBottom: "10px" }}>
+  <h1
+    className="dashboard-title logo"
+    style={{ marginBottom: "2px" }}
+  >
+    Dashboard
+  </h1>
+
+   <div
+    style={{
+      fontSize: "16px",
+      color: "#666",
+      marginTop: "0px",
+      fontWeight: 500,
+    }}
+  >
+    Hello, {ownerName || "Owner"} 
+    </div>
+    </div>
 
       {/* 🔹 FILTER SECTION */}
       <div style={{ marginBottom: "20px", display: "flex", gap: "12px" }}>
