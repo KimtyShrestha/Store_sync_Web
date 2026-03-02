@@ -1,7 +1,22 @@
 /* ───────── Layout ───────── */
 .owner-layout {
   display: flex;
-  height: 100vh;
+  min-height: 100vh; 
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #1f2a44;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  background: #f4f6f9;
 }
 
 /* ───────── Sidebar ───────── */
