@@ -42,7 +42,7 @@ export default function DailyRecordsPage() {
 
   return (
     <div style={{ backgroundColor: "#f1f5f9", minHeight: "100vh", padding: "32px" }}>
-      {/* Page Header */}
+      {/*  Header */}
       <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#1e293b", marginBottom: "4px" }}>
         Daily Records
       </h1>
