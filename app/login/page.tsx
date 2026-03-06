@@ -451,7 +451,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Right login form */}
+      {/* Right login form */}
         <div className="login-right">
           <div className="login-card">
             <div className="card-header">
@@ -521,3 +521,5 @@ export default function LoginPage() {
     </>
   );
 }
+
+
