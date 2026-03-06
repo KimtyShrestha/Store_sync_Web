@@ -1,5 +1,5 @@
 "use client";
-
+// for analytical view in dashboard 
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import {
@@ -105,7 +105,7 @@ export default function DashboardPage() {
     </div>
     </div>
 
-      {/* 🔹 FILTER SECTION */}
+      {/*  FILTER SECTION */}
       <div style={{ marginBottom: "20px", display: "flex", gap: "12px" }}>
         <select
           value={selectedBranch}
@@ -131,7 +131,7 @@ export default function DashboardPage() {
         <button onClick={fetchDashboard}>Apply</button>
       </div>
 
-      {/* 🔹 ROW 1: 4 KPI CARDS */}
+      {/* ROW 1: 4 KPI CARDS */}
       <div className="db-stats-grid">
         <div className="db-stat-card">
           <div className="db-stat-label">Total Sales</div>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
       </div>
 
       {/*
-        🔹 ROW 2: Two-column layout
+         ROW 2: Two-column layout
         LEFT  → [Avg Daily Sales] [Top Branch]  (small cards, side by side)
                 [Sales Trend chart]              (below small cards)
         RIGHT → [Bar Chart]                     (spans full height of left col, top-aligned with small cards)
