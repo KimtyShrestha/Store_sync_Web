@@ -197,7 +197,7 @@ export default function OwnerProfilePage() {
           )}
         </div>
 
-        {/* PASSWORD CARD */}
+        {/* PASSWORD entry CARD */}
         <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.07)" }}>
           <h3 style={{ fontSize: "15px", fontWeight: "700", color: "#1e293b", marginBottom: "16px" }}>
             Change Password
